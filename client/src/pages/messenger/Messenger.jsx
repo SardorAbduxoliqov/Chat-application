@@ -6,13 +6,20 @@ import Topbar from "../../components/topbar/Topbar";
 import { AuthContext } from "../../context/AuthContext";
 import "./messenger.css";
 import axios from "axios";
+import { io } from "socket.io-client";
 function Messenger() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null);
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
+
+  useEffect(() => {
+    setSocket(io("ws://localhost:8900"));
+  }, []);
+  console.log(socket);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -53,7 +60,7 @@ function Messenger() {
     }
   };
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({behavior: "smooth"});
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
   return (
     <>
