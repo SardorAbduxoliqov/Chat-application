@@ -53,6 +53,14 @@ app.use("/api/posts", postRoute);
 app.use("/api/conversations", conversationsRoute);
 app.use("/api/messages", messageRoute);
 
+// Serve static folders if it is production
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 app.listen(8800, () => {
   console.log("Backend server is running!");
 });
